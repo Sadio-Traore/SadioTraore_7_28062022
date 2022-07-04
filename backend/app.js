@@ -1,6 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config();
+const userAuth = require('./routes/auth.routes');
+const userRoutes = require('./routes/user.routes');
 
 
 mongoose.connect(process.env.SECRET_KEY,
@@ -22,6 +24,7 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
-
+app.use('/api/auth', userAuth);
+app.use('/api/auth', userRoutes);
 
 module.exports = app;
