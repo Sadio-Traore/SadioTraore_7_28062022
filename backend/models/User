@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
 const {isEmail} = require('validator')
+const bcrypt = require('bcrypt');
 
 const uniqueValidator = require('mongoose-unique-validator');
 
 const userSchema = mongoose.Schema({
-    pseudo:{type: String, required:true, unique:true, minLength:3, maxLength: 15, trimp: true},
+    pseudo:{type: String, required:true, unique:true, minLength:3, maxLength: 15, trim: true},
     email:{type: String, required:true, unique:true, validate: [isEmail], lowercase:true, trim:true },
     password:{type: String, required:true},
     picture: {type: String, default: "./uploads/profil/random-user.png"},
@@ -15,5 +16,25 @@ const userSchema = mongoose.Schema({
 });
 
 userSchema.plugin(uniqueValidator);
+
+// play function before save into display: 'block',
+userSchema.pre("save", async function(next) {
+    const salt = await bcrypt.genSalt();
+    this.password = await bcrypt.hash(this.password, salt);
+    this.email = await bcrypt.hash(this.email,salt);
+    next();
+  });
+  
+ userSchema.statics.login = async function(email, password) {
+    const user = await this.findOne({ email });
+    if (user) {
+        const auth = await bcrypt.compare(password, user.password);
+        if (auth) {
+        return user;
+        }
+        throw Error('Mot de passe érroné');
+    }
+    throw Error('Email inconnu')
+    };
 
 module.exports = mongoose.model('User', userSchema);

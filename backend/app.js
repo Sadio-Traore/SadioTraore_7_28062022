@@ -1,8 +1,12 @@
 const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config();
+const cookieParser = require('cookie-parser');
 const userAuth = require('./routes/auth.routes');
 const userRoutes = require('./routes/user.routes');
+
+const auth = require('./middleware/auth.middleware');
+
 
 
 mongoose.connect(process.env.SECRET_KEY,
@@ -20,11 +24,20 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(cookieParser());
+
+
+// jwt
+app.get('*', auth);
+app.get('/jwtid', auth, (req, res) => {
+  res.status(200).send(res.locals.user._id)
+});
+
 
 
 app.use(express.json());
 
 app.use('/api/auth', userAuth);
-app.use('/api/auth', userRoutes);
+app.use('/api/user', userRoutes);
 
 module.exports = app;
