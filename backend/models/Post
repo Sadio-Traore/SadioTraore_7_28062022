@@ -1,0 +1,28 @@
+const mongoose = require('mongoose');
+
+const postSchema = mongoose.Schema({
+  userId :{ type: String, required: true },
+  message: {type: String, trim: true,maxLength:300},
+  picture: { type: String},
+  video: {type: String},
+  comments:{ type: [
+    {
+      commenterId:String,
+      commenterPseudo: String,
+      text: String,
+      timestamp: Number,
+    }
+  ],
+  required: true,},   
+  likers:{ type: [String], required: true,}
+  // likes :{type: Number},
+  // dislikes :{type: Number},
+  // usersLiked : {type: [ String ], required: true}, 
+  // usersDisliked : {type: [ String ]},
+},  
+{
+  timestamps: true,
+},
+  );
+
+module.exports = mongoose.model('Post', postSchema)
