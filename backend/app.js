@@ -42,6 +42,6 @@ app.use(express.json());
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/api/auth', userAuth);
 app.use('/api/user', userRoutes);
-app.use('api/post', postRoutes);
+app.use('/api/post', postRoutes);
 
 module.exports = app;
