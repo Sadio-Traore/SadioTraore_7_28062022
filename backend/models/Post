@@ -14,11 +14,11 @@ const postSchema = mongoose.Schema({
     }
   ],
   required: true,},   
-  likers:{ type: [String], required: true,}
-  // likes :{type: Number},
-  // dislikes :{type: Number},
-  // usersLiked : {type: [ String ], required: true}, 
-  // usersDisliked : {type: [ String ]},
+  //likers:{ type: [String], required: true,}
+  likes :{type: Number},
+  dislikes :{type: Number},
+  usersLiked : {type: [ String ]}, 
+  usersDisliked : {type: [ String ]},
 },  
 {
   timestamps: true,
